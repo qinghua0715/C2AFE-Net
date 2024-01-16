@@ -283,10 +283,10 @@ class Attention_Gate(nn.Module):
 
         x = self.W_x(x)
 
-        # x_avg = self.avg_pool(x)
-        # x_avg = self.conv_x(x_avg.squeeze(-1).transpose(-1, -2)).transpose(-1, -2).unsqueeze(-1)
+        x_avg = self.avg_pool(x)
+        x_avg = self.conv_x(x_avg.squeeze(-1).transpose(-1, -2)).transpose(-1, -2).unsqueeze(-1)
 
-        x = x * g_hw_avg.expand_as(x)
+        x = x * g_hw_avg.expand_as(x) * x_avg.expand_as(x)
 
         x = self.conv(x)
         out = shortcut + self.gamma * x
